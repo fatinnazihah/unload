@@ -14,28 +14,38 @@ interface Entry {
   method: string
 }
 
+type Theme = 'midnight' | 'forest' | 'serenity' | 'rose'
+
 const SetupScreen: React.FC<{
   name: string
   setName: (n: string) => void
   onBegin: () => void
 }> = ({ name, setName, onBegin }) => (
   <div className="setup-overlay">
+    {/* Background Decorative Waves */}
+    <div className="setup-bg-visual"></div>
+
     <div className="setup-card">
-      <h1>unload.</h1>
-      <p>Dump your brain, clear the noise.</p>
+      <h1 className="setup-logo">unload.</h1>
+      <p className="setup-tagline">Dump your brain, clear the noise.</p>
       <form
+        className="setup-form"
         onSubmit={(e) => {
           e.preventDefault()
           if (name.trim()) onBegin()
         }}
       >
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name..."
-          autoFocus
-        />
-        <button type="submit">Begin</button>
+        <div className="input-group">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name..."
+            autoFocus
+          />
+          <button type="submit" className="begin-btn">
+            Begin
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -50,18 +60,17 @@ const App: React.FC = () => {
   const [mood, setMood] = useState<string>('Neutral 😐')
   const [selectedMethod, setSelectedMethod] = useState<string>('Classic')
   const [activePrompt, setActivePrompt] = useState<string>('')
+  const [theme, setTheme] = useState<Theme>('midnight')
 
-  // Jodit Configuration: Optimized for no-scroll and tight layout
   const config = useMemo(
     () => ({
       readonly: false,
       theme: 'dark',
       placeholder: 'Start unloading...',
       toolbarAdaptive: false,
-      // Combined eraser into the same group to prevent wrapping
       buttons: ['bold', 'italic', 'underline', 'ul', 'ol', 'undo', 'redo', 'eraser'],
-      height: 'auto',
-      minHeight: 200,
+      height: 300,
+      minHeight: 300,
       statusbar: false,
       showCharsCounter: false,
       showWordsCounter: false,
@@ -69,7 +78,7 @@ const App: React.FC = () => {
       allowResizeY: false,
       allowResizeX: false,
       style: {
-        background: '#000000',
+        background: 'transparent',
         color: '#ffffff',
         padding: '10px'
       }
@@ -80,19 +89,22 @@ const App: React.FC = () => {
   useEffect(() => {
     const savedName = localStorage.getItem('unload_user_name')
     const savedEntries = localStorage.getItem('unload_v8_data')
+    const savedTheme = localStorage.getItem('unload_theme') as Theme
     if (savedName) {
       setUserName(savedName)
       setIsSetup(true)
     }
     if (savedEntries) setEntries(JSON.parse(savedEntries))
+    if (savedTheme) setTheme(savedTheme)
   }, [])
 
   useEffect(() => {
     if (isSetup) {
       localStorage.setItem('unload_user_name', userName)
       localStorage.setItem('unload_v8_data', JSON.stringify(entries))
+      localStorage.setItem('unload_theme', theme)
     }
-  }, [entries, userName, isSetup])
+  }, [entries, userName, isSetup, theme])
 
   const generatePrompt = (method: string) => {
     const prompts: Record<string, string[]> = {
@@ -134,6 +146,9 @@ const App: React.FC = () => {
 
     setEntries([newEntry, ...entries])
     setContent('')
+    if (editorRef.current) {
+      ;(editorRef.current as any).component.value = ''
+    }
     generatePrompt(selectedMethod)
   }
 
@@ -141,11 +156,23 @@ const App: React.FC = () => {
     return <SetupScreen name={userName} setName={setUserName} onBegin={() => setIsSetup(true)} />
 
   return (
-    <div className="unload-container">
+    <div className={`unload-container theme-${theme}`}>
       <aside className="input-panel">
         <div className="panel-content">
           <header className="brand">
-            <h1>unload</h1>
+            <div className="brand-flex">
+              <h1>unload</h1>
+              <div className="theme-picker">
+                {(['midnight', 'forest', 'serenity', 'rose'] as Theme[]).map((t) => (
+                  <button
+                    key={t}
+                    className={`theme-dot ${t} ${theme === t ? 'active' : ''}`}
+                    onClick={() => setTheme(t)}
+                    title={t}
+                  />
+                ))}
+              </div>
+            </div>
             <div className="user-greeting">
               <p>Welcome back, {userName}.</p>
               <button className="edit-name-btn" onClick={() => setIsSetup(false)}>
@@ -198,10 +225,10 @@ const App: React.FC = () => {
       </aside>
 
       <main className="timeline">
-        {entries.slice(0, 10).map((item) => (
+        {entries.map((item) => (
           <div key={item.id} className="entry-card">
             <div className="entry-header">
-              {item.time} / {item.method} / {item.mood}
+              {item.date} • {item.time} / {item.method} / {item.mood}
             </div>
             <div
               className="entry-body rich-content"

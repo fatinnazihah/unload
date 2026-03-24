@@ -1,0 +1,288 @@
+/* --- Global Styles --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --border: #262626;
+  --accent: #fff;
+  --text-dim: #666;
+  --danger: #ff4444;
+}
+
+body, html {
+  background: var(--bg) !important;
+  color: #fff;
+  font-family: 'Inter', -apple-system, sans-serif;
+  height: 100%;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.unload-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* --- Sidebar (Input Panel) --- */
+.input-panel {
+  width: 420px;
+  min-width: 420px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+}
+
+.brand h1 {
+  font-size: 2.2rem;
+  letter-spacing: -2px;
+  font-weight: 800;
+  text-transform: lowercase;
+}
+
+.user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.user-greeting p {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.edit-name-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  opacity: 0.3;
+  transition: 0.2s;
+}
+
+.edit-name-btn:hover {
+  opacity: 1;
+  transform: rotate(30deg);
+}
+
+/* --- Jodit Component Overrides --- */
+.editor-section {
+  width: 100%;
+  margin-top: 5px;
+}
+
+.jodit-wrapper {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000 !important;
+  width: 100%;
+}
+
+.jodit-container {
+  border: none !important;
+  background: #000 !important;
+}
+
+.jodit-toolbar__box {
+  background: #181818 !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* Fixes the black gap at the bottom */
+.jodit-workplace {
+  background: #000 !important;
+}
+
+.jodit-wysiwyg {
+  background: #000 !important;
+  color: #fff !important;
+  min-height: 200px !important;
+  padding: 15px !important;
+}
+
+/* Force Bold and List visibility inside editor */
+.jodit-wysiwyg b, .jodit-wysiwyg strong { font-weight: 800 !important; color: #fff !important; }
+.jodit-wysiwyg ul, .jodit-wysiwyg ol { padding-left: 25px !important; margin: 10px 0 !important; list-style: initial !important; }
+
+/* --- Timeline Styling (Right Side) --- */
+.timeline {
+  flex: 1;
+  padding: 60px 80px;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.entry-card {
+  border-left: 1px solid #222;
+  padding-left: 30px;
+  margin-bottom: 40px;
+}
+
+.entry-header {
+  font-size: 0.65rem;
+  font-family: monospace;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.rich-content {
+  line-height: 1.8;
+  color: #ddd;
+  font-size: 1.1rem;
+}
+
+.rich-content strong, .rich-content b {
+  font-weight: 800 !important;
+  color: #fff !important;
+}
+
+.rich-content ul, .rich-content ol {
+  padding-left: 25px !important;
+  margin: 15px 0 !important;
+  list-style: initial !important;
+}
+
+.rich-content li {
+  margin-bottom: 8px;
+  display: list-item !important;
+}
+
+/* --- Controls & Inputs --- */
+.method-selector label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.method-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.method-chips button {
+  background: #1a1a1a;
+  border: 1px solid var(--border);
+  color: #666;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.method-chips button.active {
+  background: #fff;
+  color: #000;
+  font-weight: 800;
+}
+
+.prompt-box {
+  background: #161616;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 2px solid #333;
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+.form-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.form-controls select {
+  flex: 1;
+  background: #000;
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.form-controls button {
+  background: #fff;
+  color: #000;
+  font-weight: 800;
+  border: none;
+  border-radius: 8px;
+  padding: 0 25px;
+  cursor: pointer;
+}
+
+/* --- Setup Screen --- */
+.setup-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.setup-card { text-align: center; }
+
+.setup-card h1 {
+  font-size: 3rem;
+  letter-spacing: -4px;
+  margin-bottom: 10px;
+}
+
+.setup-card input {
+  background: #111;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  width: 280px;
+  text-align: center;
+  outline: none;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.setup-card button {
+  display: block;
+  margin: 0 auto;
+  background: #fff;
+  color: #000;
+  font-weight: 800;
+  padding: 12px 30px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+}
